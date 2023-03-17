@@ -1,5 +1,6 @@
 package app;
 
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import core.util.HibernateUtil;
@@ -8,6 +9,16 @@ import web.member.pojo.Member;
 
 public class TestApp {
     public static void main(String[] args) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+//        String hql = "FROM Member WHERE username='admin'"; // find all
+        String hql = "SELECT new web.member.pojo.Member(username, nickname, roleId)"
+            + "FROM Member ";
+//            + "WHERE username='admin'";
+        List<Member> memberList = session.createQuery(hql, Member.class).list();
+        for (Member member : memberList) {
+            System.out.println(member);
+        }
 
 //        // insert
 //        Member mem1 = new Member();
@@ -29,7 +40,8 @@ public class TestApp {
 //        System.out.println(new TestApp().updateByID(mem2));
 
         // select by id
-        System.out.println(new TestApp().findByID(1).getNickname());;
+//        System.out.println(new TestApp().findByID(1).getNickname());
+        ;
     }
 
     public Member findByID(Integer id) {
